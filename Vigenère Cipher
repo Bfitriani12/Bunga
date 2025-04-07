@@ -1,0 +1,70 @@
+def vigenere_encrypt(plaintext, key):
+    def char_to_num(c):
+        return ord(c) - ord('A')
+
+    def num_to_char(n):
+        return chr(n + ord('A'))
+
+    ciphertext = []
+    key = key.upper()
+    key_length = len(key)
+    key_index = 0
+
+    for char in plaintext:
+        if char.isalpha():
+            p = char_to_num(char.upper())
+            k = char_to_num(key[key_index % key_length])
+            c = (p + k) % 26
+            encrypted_char = num_to_char(c)
+            ciphertext.append(encrypted_char)
+            key_index += 1
+        else:
+            ciphertext.append(char)
+
+    return ''.join(ciphertext)
+
+def vigenere_decrypt(ciphertext, key):
+    def char_to_num(c):
+        return ord(c) - ord('A')
+
+    def num_to_char(n):
+        return chr(n + ord('A'))
+
+    plaintext = []
+    key = key.upper()
+    key_length = len(key)
+    key_index = 0
+
+    for char in ciphertext:
+        if char.isalpha():
+            c = char_to_num(char.upper())
+            k = char_to_num(key[key_index % key_length])
+            p = (c - k + 26) % 26
+            decrypted_char = num_to_char(p)
+            plaintext.append(decrypted_char)
+            key_index += 1
+        else:
+            plaintext.append(char)
+
+    return ''.join(plaintext)
+
+# ==== CONTOH PENGGUNAAN ====
+plaintext = """Di sebuah taman bermain, anak-anak berlarian dengan wajah penuh kebahagiaan. Seorang ibu duduk di bangku kayu, mengawasi anaknya yang bermain di ayunan. Seorang bocah tertawa riang saat meluncur di perosotan, menikmati angin yang menerpa wajahnya. Di sisi lain, sekelompok anak bermain kejar-kejaran di atas rumput hijau. Pedagang es krim mendorong gerobaknya, menarik perhatian anak-anak yang ingin menikmati sesuatu yang dingin. Langit biru cerah menaungi taman, memberikan suasana yang menyenangkan. Sore semakin larut, tetapi tawa dan canda masih menggema di antara pepohonan yang rindang."""
+
+key = "KEY Bunga"
+
+# Enkripsi
+ciphertext = vigenere_encrypt(plaintext, key)
+# Dekripsi
+decrypted = vigenere_decrypt(ciphertext, key)
+
+# Simpan ke file
+with open("vigenere_output.txt", "w", encoding="utf-8") as file:
+    file.write("=== PLAINTEXT ===\n")
+    file.write(plaintext + "\n\n")
+    file.write("=== CIPHERTEXT ===\n")
+    file.write(ciphertext + "\n\n")
+    file.write("=== DECRYPTED ===\n")
+    file.write(decrypted)
+
+print("Selesai! Hasil disimpan ke 'vigenere_output.txt'")
